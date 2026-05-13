@@ -18,3 +18,5 @@ accelerate
 sentencepiece
 protobuf
 python-multipart
+pytest
+
