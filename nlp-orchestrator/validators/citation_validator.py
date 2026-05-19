@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-from utils.citation_extractor import extract_legal_citations
+from legal_utils.citation_extractor import extract_legal_citations
 
 DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "legal_sections.json"
 
