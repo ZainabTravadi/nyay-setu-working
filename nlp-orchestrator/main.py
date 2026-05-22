@@ -8,6 +8,7 @@ Endpoints:
   POST /api/legal/analyze           — Sync version (testing only)
   GET  /health                      — Health check
 """
+import os
 from utils import async_retry
 import asyncio
 import json
@@ -33,8 +34,8 @@ from synthesizer import synthesize_answers
 from validators.citation_validator import validate_citations_from_text
 from avatar_speech import get_interim_messages, convert_to_hinglish, detect_domain
 from services.kanoon_search import build_kanoon_context
-from routers.forensics import router as forensics_router
-from routers.modi_ocr import router as modi_ocr_router
+# from routers.forensics import router as forensics_router
+# from routers.modi_ocr import router as modi_ocr_router
 
 # Initialize clients for deep research pipeline
 from groq import AsyncGroq
@@ -64,14 +65,20 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_ORIGIN, "http://localhost:3000", "http://localhost:8080"],
+    allow_origins=[
+        FRONTEND_ORIGIN,
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "http://localhost:8080",
+        "https://nyaysetu-lovat.vercel.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(forensics_router)
-app.include_router(modi_ocr_router)
+# app.include_router(forensics_router)
+# app.include_router(modi_ocr_router)
 
 
 # ─── Models ───────────────────────────────────────────────────────────────────
@@ -576,5 +583,6 @@ async def deep_research(body: LegalQuery, request: Request):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)
+    port = int(os.getenv("PORT", 8001))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
 
