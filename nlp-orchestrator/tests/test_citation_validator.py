@@ -17,15 +17,15 @@ def test_bns_bnss_section_ranges():
 
 
 def test_valid_bns_sections():
-    assert validate_citation("BNS Section 302")
-    assert validate_citation("BNS Section 350")
+    assert validate_citation("BNS", "302")["valid"]
+    assert validate_citation("BNS", "350")["valid"]
 
 
 def test_valid_bnss_sections():
-    assert validate_citation("BNSS Section 482")
-    assert validate_citation("BNSS Section 531")
+    assert validate_citation("BNSS", "482")["valid"]
+    assert validate_citation("BNSS", "531")["valid"]
 
 
 def test_invalid_sections():
-    assert not validate_citation("BNS Section 999")
-    assert not validate_citation("BNSS Section 999")
+    assert not validate_citation("BNS", "999")["valid"]
+    assert not validate_citation("BNSS", "999")["valid"]
