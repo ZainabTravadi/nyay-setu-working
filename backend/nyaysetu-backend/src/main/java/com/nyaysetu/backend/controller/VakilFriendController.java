@@ -1,4 +1,3 @@
-lfriendcontroller · JAVA
 package com.nyaysetu.backend.controller;
  
 import com.nyaysetu.backend.dto.ChatMessageRequest;
@@ -112,7 +111,7 @@ public class VakilFriendController {
             
             Map<String, Object> response = new HashMap<>();
             response.put("sessionId", session.getId());
-            response.put("message", "🙏 Namaste! I am Vakil-Friend, your AI legal assistant. " +
+            response.put("message", " Namaste! I am Vakil-Friend, your AI legal assistant. " +
                     "I'm here to help you file your legal case easily.\n\n" +
                     "Please tell me about your legal issue. What happened?");
             response.put("status", "ACTIVE");
@@ -184,7 +183,7 @@ public class VakilFriendController {
                 ));
             }
             
-            log.info("📋 Completing session {} for user {}", sessionId, user.getEmail());
+            log.info(" Completing session {} for user {}", sessionId, user.getEmail());
             Object result = vakilFriendService.completeSession(sessionId, user);
             
             Map<String, Object> response = new HashMap<>();
@@ -192,7 +191,7 @@ public class VakilFriendController {
  
             if (result instanceof com.nyaysetu.backend.entity.FirRecord) {
                 com.nyaysetu.backend.entity.FirRecord fir = (com.nyaysetu.backend.entity.FirRecord) result;
-                response.put("message", "✅ Your FIR has been successfully sent to the Police!");
+                response.put("message", " Your FIR has been successfully sent to the Police!");
                 // Map FIR fields to Case fields for frontend compatibility
                 response.put("caseId", fir.getFirNumber());
                 response.put("caseTitle", fir.getTitle());
@@ -203,10 +202,10 @@ public class VakilFriendController {
                 response.put("respondent", "Unknown (Police Investigation)");
                 response.put("judgeAssigned", false);
                 response.put("hearingScheduled", false);
-                log.info("✅ Completed session {} and created FIR {}", sessionId, fir.getFirNumber());
+                log.info(" Completed session {} and created FIR {}", sessionId, fir.getFirNumber());
             } else if (result instanceof CaseEntity) {
                 CaseEntity createdCase = (CaseEntity) result;
-                response.put("message", "✅ Your case has been successfully filed!");
+                response.put("message", " Your case has been successfully filed!");
                 response.put("caseId", createdCase.getId());
                 response.put("caseTitle", createdCase.getTitle());
                 response.put("caseType", createdCase.getCaseType());
@@ -228,7 +227,7 @@ public class VakilFriendController {
                 } else {
                     response.put("hearingScheduled", false);
                 }
-                log.info("✅ Completed session {} and created CASE {}", sessionId, createdCase.getId());
+                log.info(" Completed session {} and created CASE {}", sessionId, createdCase.getId());
             }
  
             return ResponseEntity.ok(response);
@@ -314,7 +313,7 @@ public class VakilFriendController {
                 return ResponseEntity.status(401).build();
             }
  
-            log.info("📄 Document analysis request - Case: {}, File: {}, User: {}", 
+            log.info(" Document analysis request - Case: {}, File: {}, User: {}", 
                     caseId, file.getOriginalFilename(), user.getEmail());
  
             DocumentAnalysisResponse analysis = documentService.analyzeDocument(
@@ -324,7 +323,7 @@ public class VakilFriendController {
                     user
             );
  
-            log.info("✅ Document analyzed: {} - Validity: {}, Usefulness: {}, StoredInVault: {}",
+            log.info(" Document analyzed: {} - Validity: {}, Usefulness: {}, StoredInVault: {}",
                     file.getOriginalFilename(),
                     analysis.getValidityStatus(),
                     analysis.getUsefulnessLevel(),
@@ -333,7 +332,7 @@ public class VakilFriendController {
             return ResponseEntity.ok(analysis);
  
         } catch (Exception e) {
-            log.error("❌ Document analysis failed: {}", e.getMessage(), e);
+            log.error(" Document analysis failed: {}", e.getMessage(), e);
             return ResponseEntity.status(500).body(
                     DocumentAnalysisResponse.builder()
                             .documentName(file.getOriginalFilename())
@@ -360,7 +359,7 @@ public class VakilFriendController {
                 return ResponseEntity.status(401).build();
             }
  
-            log.info("📄 Document analysis for session: {}, File: {}", 
+            log.info(" Document analysis for session: {}, File: {}", 
                     sessionId, file.getOriginalFilename());
  
             // Analyze without case context (case will be created later)
@@ -374,7 +373,7 @@ public class VakilFriendController {
             return ResponseEntity.ok(analysis);
  
         } catch (Exception e) {
-            log.error("❌ Document analysis failed: {}", e.getMessage(), e);
+            log.error(" Document analysis failed: {}", e.getMessage(), e);
             return ResponseEntity.status(500).body(
                     DocumentAnalysisResponse.builder()
                             .documentName(file.getOriginalFilename())
@@ -423,7 +422,7 @@ public class VakilFriendController {
             return ResponseEntity.ok(Map.of(
                     "entryId", entryId,
                     "integrityVerified", isValid,
-                    "message", isValid ? "Entry integrity verified ✅" : "⚠️ Entry may have been tampered with"
+                    "message", isValid ? "Entry integrity verified " : " Entry may have been tampered with"
             ));
         } catch (Exception e) {
             return ResponseEntity.status(404).body(Map.of(
@@ -442,4 +441,3 @@ public class VakilFriendController {
         return userRepository.findByEmail(email).orElse(null);
     }
 }
- 
